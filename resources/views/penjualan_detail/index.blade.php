@@ -115,6 +115,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="diskon" class="col-lg-2 control-label">Potongan</label>
+                                    <div class="col-lg-8">
+                                        <input type="number" name="potongan" id="potongan" class="form-control potongan"
+                                            value="{{ !empty($memberSelected->id_member) ? $diskon : 0 }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="bayar" class="col-lg-2 control-label">Bayar</label>
                                     <div class="col-lg-8">
                                         <input type="text" id="bayarrp" class="form-control" readonly>
@@ -256,12 +263,20 @@
                 loadForm($(this).val());
             });
 
-            $('#diterima').on('input', function() {
+            $(document).on('input', '#potongan', function() {
                 if ($(this).val() == "") {
                     $(this).val(0).select();
                 }
 
                 loadForm($('#diskon').val(), $(this).val());
+            });
+
+            $('#diterima').on('input', function() {
+                if ($(this).val() == "") {
+                    $(this).val(0).select();
+                }
+
+                loadForm($('#diskon').val(), $('#potongan').val(), $(this).val());
             }).focus(function() {
                 $(this).select();
             });
@@ -337,11 +352,12 @@
             }
         }
 
-        function loadForm(diskon = 0, diterima = 0) {
+        function loadForm(diskon = 0, potongan = 0, diterima = 0) {
             $('#total').val($('.total').text());
             $('#total_item').val($('.total_item').text());
 
-            $.get(`{{ url('/transaksi/loadform') }}/${diskon}/${$('.total').text()}/${diterima}`)
+            // $.get(`{{ url('/transaksi/loadform') }}/${diskon}/${$('.total').text()}/${diterima}`)
+            $.get(`{{ url('/transaksi/loadform') }}/${diskon}/${potongan}/${$('.total').text()}/${diterima}`)
                 .done(response => {
                     $('#totalrp').val('Rp. ' + response.totalrp);
                     $('#bayarrp').val('Rp. ' + response.bayarrp);

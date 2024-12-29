@@ -124,9 +124,9 @@ class PenjualanDetailController extends Controller
         return response(null, 204);
     }
 
-    public function loadForm($diskon = 0, $total = 0, $diterima = 0)
+    public function loadForm($diskon = 0, $potongan = 0, $total = 0, $diterima = 0)
     {
-        $bayar   = $total - ($diskon / 100 * $total);
+        $bayar   = $total - $potongan - ($diskon / 100 * $total);
         $kembali = ($diterima != 0) ? $diterima - $bayar : 0;
         $data    = [
             'totalrp' => format_uang($total),
